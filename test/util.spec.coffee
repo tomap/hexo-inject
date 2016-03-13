@@ -1,4 +1,7 @@
-{ camalize, parse } = require('../src/util')
+{ camalize } = require('../src/util')
+
 describe "Util", ->
-  it ".camalize"
-  it ".parse"
+  it ".camalize", ->
+    camalize('foo_bar').should.equal('fooBar')
+    camalize('foo___bar').should.equal('fooBar')
+    camalize('_').should.equal('')

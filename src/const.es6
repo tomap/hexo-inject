@@ -5,6 +5,15 @@ export const INJECTION_POINTS = [
   'body_end'
 ]
 
+export const REGEX = {
+  head_begin        : /([\s\S]*?)(<head.*>[\n\r\s\t]*)([\s\S]*)/i,
+  head_end          : /([\s\S]*?)([\n\r\s\t]*<\/head>)([\s\S]*)/i,
+  body_begin        : /([\s\S]*?)(<body.*>[\n\r\s\t]*)([\s\S]*)/i,
+  body_end          : /([\s\S]*?)([\n\r\s\t]*<\/body>)([\s\S]*)/i,
+  injection_begin   : /([\s\S]*?)(<!-- hexo-inject:begin -->)([\s\S]*)/i,
+  injection_end     : /([\s\S]*?)(<!-- hexo-inject:end -->)([\s\S]*)/i,
+}
+
 export const API = [
   'raw',
   'tag',
@@ -13,10 +22,3 @@ export const API = [
   'link',
   'require'
 ]
-
-export const REGEX = {
-  head_begin  : /([\s\S]*)(<head.*>)([\s\S]*)/i,
-  body_begin  : /([\s\S]*)(<body.*>)([\s\S]*)/i,
-  head_end    : /([\s\S]*)(<\/head>)([\s\S]*)/i,
-  body_end    : /([\s\S]*)(<\/body>)([\s\S]*)/i
-}
