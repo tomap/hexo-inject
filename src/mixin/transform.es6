@@ -9,7 +9,7 @@ const Transform = {
     try {
       let doc = Parser.get().parse(src)
       if (!doc.isComplete) throw new Error('Incomplete document')
-      let injections = _.object(INJECTION_POINTS, INJECTION_POINTS.map(this._resolveInjectionPoint.bind(this)))
+      let injections = _.object(INJECTION_POINTS, INJECTION_POINTS.map(this._resolveInjectionPoint.bind(this, src)))
       let resolved = await Promise.props(injections)
       resolved = _.mapObject(resolved, (content) => content.filter(({ shouldInject }) => shouldInject).join('\n'))
 

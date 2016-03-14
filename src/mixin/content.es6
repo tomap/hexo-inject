@@ -8,19 +8,19 @@ function resolve (o, ...args) {
 }
 
 const Content = {
-  async _resolveContent ({ html, opts }) {
+  async _resolveContent (src, { html, opts }) {
     opts = opts || { shouldInject: true }
-    html = resolve(html)
-    let shouldInject = resolve(opts.shouldInject)
+    html = resolve(html, src)
+    let shouldInject = resolve(opts.shouldInject, src)
     return await Promise.props({ html, shouldInject })
   },
-  async _resolveInjectionPoint (pos) {
-    return await Promise.map(this._injectors[pos], this._resolveContent.bind(this))
+  async _resolveInjectionPoint (pos, src) {
+    return await Promise.map(this._injectors[pos], this._resolveContent.bind(this, src))
   },
-  async _buildHTMLTag (name, attrs, content, endTag) {
+  async _buildHTMLTag (name, attrs, content, endTag, src) {
     [ attrs, content ] = await Promise.all([
-      Promise.props(_.mapObject(attrs, (value) => resolve(value))),
-      resolve(content || '')
+      Promise.props(_.mapObject(attrs, (value) => resolve(value, src))),
+      resolve(content || '', src)
     ])
     let attr_list = _.map(attrs, (value, key) => `${key}='${value}'`).join(' ')
     let html = `<${name} ${attr_list}>${endTag ? `${content}</${name}>`: ''}`
