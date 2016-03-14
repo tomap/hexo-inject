@@ -40,11 +40,3 @@ describe 'API', ->
           inject[i].calledWith(injection_point, 'foo', 'bar', 'barz').should.be.true
 
     INJECTION_POINTS.forEach (i) -> should_expose_api(i)
-
-  describe 'content', ->
-    it 'raw HTML'
-    it 'tag'
-    it 'tag without end'
-    it 'script'
-    it 'style'
-    it 'link'

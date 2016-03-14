@@ -75,7 +75,7 @@ export default class Parser {
       let [t, p] = token.type.split('_')
       switch (p) {
         case 'begin':
-          stack.push(new Block(t, token))
+          stack.push(Block.make(t, token))
           break;
         case 'end':
           let block = stack.pop()

@@ -1,37 +1,38 @@
 import Promise from 'bluebird'
 import _ from 'underscore'
+import Parser from '../parser'
+import { INJECTION_POINTS } from '../const'
 
 const Transform = {
-  async _resolveContent ({ html, opts }) {
-    function resolve (o, ...args) {
-      switch (typeof o) {
-        case 'string':
-          return o
-        case 'function':
-          return o(...args)
-        default:
-          throw new TypeError('Expect attributes or HTML to be a string or a function')
-      }
-    }
-    html = resolve(html)
-    let shouldInject = opts.shouldInject = resolve(opts.shouldInject)
-    return await Promise.props({ html, shouldInject })
-  },
-  async _resolveInjectionPoint (pos) {
-    return await Promise.map(this._injectors[pos], this._resolveContent.bind(this))
-  },
+  async _transform (src, data) {
+    let { log } = this.hexo
+    try {
+      let doc = Parser.get().parse(src)
+      if (!doc.isComplete) throw new Error('Incomplete document')
+      let injections = _.object(INJECTION_POINTS, INJECTION_POINTS.map(this._resolveInjectionPoint.bind(this)))
+      let resolved = await Promise.props(injections)
+      resolved = _.mapObject(resolved, (content) => content.filter(({ shouldInject }) => shouldInject).join('\n'))
 
-  _transform (src, data) {
-    // let { script } = this
-    // let shouldInject =
-    //   BODY_REGEX.test(src)          &&
-    //   (
-    //   src.indexOf(MATH_MARKER) >= 0 ||
-    //   INLINE_MATH_REGEX.test(src)   ||
-    //   BLOCK_MATH_REGEX.test(src)
-    //   )
-    // return shouldInject ? src.replace(INJECTION_REGEX, `$1${script.src}$2`)
-    //                     : src
+      doc.head.injectBefore(resolved['head_begin'])
+      doc.head.injectAfter(resolved['head_end'])
+      doc.body.injectBefore(resolved['body_begin'])
+      doc.body.injectAfter(resolved['body_end'])
+
+      if (!doc.head.validate()) {
+        log.warn('[hexo-inject] rogue injection block detected in <head> section')
+        log.debug(doc.head.content)
+      }
+      if (!doc.body.validate()) {
+        log.warn('[hexo-inject] rogue injection block detected in <body> section')
+        log.debug(doc.body.content)
+      }
+
+      src = doc.content
+    } catch (e) {
+      log.debug(`[hexo-inject] SKIP: ${data.source}`)
+      log.debug(e)
+    }
+    return src
   }
 }
 
