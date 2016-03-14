@@ -3,7 +3,7 @@ import { Block, Document } from './node'
 
 var parser = null
 export default class Parser {
-  static get() {
+  static get () {
     if (parser === null) parser = new Parser()
     return parser
   }
@@ -15,12 +15,11 @@ export default class Parser {
       let ruleName = ruleNames[i]
       let [rule, pos] = ruleName.split('_')
       let isEnd = pos === 'end'
-      let n = context.tokens.length
       let m = r.exec(context.text)
       if (m) {
         let [, before, tag, remain] = m
         context.text = remain
-        if (before !== "") {
+        if (before !== '') {
           context.tokens.push({
             type: isEnd ? `${rule}_text` : defaultType,
             content: before
@@ -69,14 +68,14 @@ export default class Parser {
       { type: root, children: root }
     ]
 
-    function top() { return stack[stack.length - 1] }
+    function top () { return stack[stack.length - 1] }
 
     tokens.forEach((token) => {
       let [t, p] = token.type.split('_')
       switch (p) {
         case 'begin':
           stack.push(Block.make(t, token))
-          break;
+          break
         case 'end':
           let block = stack.pop()
           if (block.type !== t) throw new SyntaxError(`No matching '${t}_begin'`)
@@ -93,7 +92,7 @@ export default class Parser {
     return root
   }
   parse (src) {
-    let tokens = this._tokenize (src)
+    let tokens = this._tokenize(src)
 
     let doc = new Document()
     doc.children = this._reduceBlock(tokens)

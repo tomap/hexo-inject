@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-export function wrap(type, content) {
+export function wrap (type, content) {
   // If content is another token, clone it and change the type
   if (_.isObject(content) && _.isString(content.type)) {
     content = _.clone(content)
@@ -69,7 +69,7 @@ export class Block extends Node {
 }
 
 const INJECTION_BEGIN = wrap('injection_begin', '<!-- hexo-inject:begin -->')
-const INJECTION_END =   wrap('injection_end'  , '<!-- hexo-inject:end -->')
+const INJECTION_END   = wrap('injection_end'  , '<!-- hexo-inject:end -->')
 export class InjectionBlock extends Block {
   constructor (begin = INJECTION_BEGIN, end = INJECTION_END) {
     super('injection', begin, end)
@@ -96,7 +96,7 @@ export class Document extends Node {
   get body () {
     return this.children.find(({ type }) => type === 'body')
   }
-  get isComplete() {
+  get isComplete () {
     return typeof this.head === 'object' && typeof this.body === 'object'
   }
 }
