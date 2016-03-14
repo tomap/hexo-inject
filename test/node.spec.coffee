@@ -1,7 +1,5 @@
 { default: Node, Block, InjectionBlock, wrap } = require('../src/parser/node')
 
-console.log(Node)
-
 describe 'Node', ->
   foo = wrap('test', 'foo')
   bar = wrap('test', 'bar')

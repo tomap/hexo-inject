@@ -1,9 +1,11 @@
 const Register = {
   register () {
-    let { filter } = this.hexo.extend
-    this.hexo.inject = this
+    let { hexo } = this
+    let { filter } = hexo.extend
+    hexo.inject = this
     filter.register("after_render:html", this._transform.bind(this))
     filter.register("after_init", this._filterPolyfill.bind(this))
+    hexo.execFilter("inject_ready", this, { context: hexo })
   },
   _filterPolyfill () {
     let { hexo } = this,
