@@ -6,6 +6,36 @@ sinon = require('sinon')
 describe 'Content', ->
   inject = new Inject()
 
+  describe 'helper', ->
+    beforeEach ->
+      sinon.stub(inject, 'raw')
+    afterEach ->
+      inject.raw.restore()
+
+    should_generate_raw_html = (expected) ->
+      inject.raw.calledOnce.should.be.true
+      inject.raw.calledWith('test').should.be.true
+      [x, html, opts] = inject.raw.getCall(0).args
+      html.should.be.a('function')
+      expect(opts).to.be.undefined
+      html().should.eventually.equal(expected)
+
+    it 'tag', ->
+      inject.tag('test', 'h1', class: 'foo', 'heading', true)
+      should_generate_raw_html("<h1 class='foo'>heading</h1>")
+    it 'script', ->
+      inject.script('test', src: 'foo/bar.js')
+      should_generate_raw_html("<script src='foo/bar.js'></script>")
+    it 'script - with content', ->
+      inject.script('test', type: 'text/test', 'this is a test')
+      should_generate_raw_html("<script type='text/test'>this is a test</script>")
+    it 'style', ->
+      inject.style('test', media: 'screen', '* { display: none }')
+      should_generate_raw_html("<style media='screen'>* { display: none }</style>")
+    it 'link', ->
+      inject.link('test', src: 'foo/style.css')
+      should_generate_raw_html("<link src='foo/style.css'>")
+
   describe 'tag', ->
     src = 'foo bar baz'
     it '._buildHTMLTag - link', ->
