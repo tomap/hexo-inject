@@ -12,5 +12,4 @@ require('./gulp-task/watch')('default')
 require('./gulp-task/clean')('test')
 #>
 #< contents
-require('./gulp-task/test-asset')()
 #>

@@ -20,7 +20,7 @@ describe 'API', ->
       mock_hexo.extend.filter.register.calledWith('after_render:html').should.be.true
       mock_hexo.extend.filter.register.calledWith('after_init').should.be.true
       mock_hexo.inject.should.equal(inject)
-    it 'should execute `inject_ready` filter`', ->
+    it.skip 'should execute `inject_ready` filter`', ->
       mock_hexo.execFilter.calledWith('inject_ready', inject, { context: mock_hexo })
         .should.be.true
 
