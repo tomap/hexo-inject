@@ -1,5 +1,6 @@
 Inject = require('../src/inject')
 sinon = require('sinon')
+Parser = require('../src/parser')
 
 describe 'Transform', ->
   mock_hexo =
@@ -64,3 +65,8 @@ describe 'Transform', ->
       .should.eventually.equal(partial)
     mock_hexo.log.debug.calledTwice.should.be.true
     mock_hexo.log.debug.calledWithMatch('[hexo-inject] SKIP: test-partial').should.be.true
+
+  it 'should overwrite existing injeciton blocks', ->
+    parser = new Parser()
+    inject._transform(injected, source: 'test')
+      .should.eventually.equal(injected)

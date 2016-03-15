@@ -8,8 +8,14 @@ describe "Parser", ->
     <!DOCTYPE html>
     <html>
       <head>
+        <!-- hexo-inject:begin -->
+        injected stuff at beginning
+        <!-- hexo-inject:end -->
         <meta charset="utf-8">
         <title></title>
+        <!-- hexo-inject:begin -->
+        injected stuff at end
+        <!-- hexo-inject:end -->
       </head>
       <body class='some-class'>
         <!-- hexo-inject:begin -->
@@ -29,7 +35,13 @@ describe "Parser", ->
     _.pluck(tokens, 'type').should.deep.equal([
       'text',
       'head_begin'
+      'injection_begin'
+      'injection_text'
+      'injection_end'
       'head_text'
+      'injection_begin'
+      'injection_text'
+      'injection_end'
       'head_end'
       'text'
       'body_begin'

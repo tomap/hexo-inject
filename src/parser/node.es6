@@ -1,4 +1,5 @@
 import _ from 'underscore'
+import { createHash } from 'crypto'
 
 export function wrap (type, content) {
   // If content is another token, clone it and change the type
@@ -27,6 +28,9 @@ export default class Node {
   }
   get lastChild () {
     return this.children.length === 0 ? null : this.children[this.children.length - 1]
+  }
+  clear () {
+    this.children = []
   }
 }
 
@@ -66,6 +70,11 @@ export class Block extends Node {
     }
     lastChild.injectAfter(content)
   }
+  clearInjections () {
+    let { firstChild, lastChild } = this
+    if (firstChild !== null && firstChild.type === 'injection') firstChild.clear()
+    if (lastChild !== null && lastChild.type === 'injection') lastChild.clear()
+  }
 }
 
 const INJECTION_BEGIN = wrap('injection_begin', '<!-- hexo-inject:begin -->')
@@ -73,14 +82,30 @@ const INJECTION_END   = wrap('injection_end'  , '<!-- hexo-inject:end -->')
 export class InjectionBlock extends Block {
   constructor (begin = INJECTION_BEGIN, end = INJECTION_END) {
     super('injection', begin, end)
+    this._contentHash = {}
+  }
+  _ensureUniqueContent (node) {
+    let hasher = createHash('md5')
+    let { content } = node
+    hasher.update(content)
+    let hash = hasher.digest('hex')
+    if (this._contentHash[hash]) return false
+    this._contentHash[hash] = node
+    return true
   }
   injectBefore (content) {
     if (_.isArray(content)) return content.forEach(this.injectBefore.bind(this))
-    this.children.unshift(wrap('injection_text', content))
+    content = wrap('injection_text', content)
+    if (this._ensureUniqueContent(content)) this.children.unshift(content)
   }
   injectAfter (content) {
     if (_.isArray(content)) return content.forEach(this.injectAfter.bind(this))
-    this.children.push(wrap('injection_text', content))
+    content = wrap('injection_text', content)
+    if (this._ensureUniqueContent(content)) this.children.push(content)
+  }
+  clear () {
+    super.clear()
+    this._contentHash = {}
   }
 }
 

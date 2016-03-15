@@ -18,6 +18,9 @@ const Transform = {
           .value()
       })
 
+      doc.head.clearInjections()
+      doc.body.clearInjections()
+
       doc.head.injectBefore(resolved['head_begin'])
       doc.head.injectAfter(resolved['head_end'])
       doc.body.injectBefore(resolved['body_begin'])

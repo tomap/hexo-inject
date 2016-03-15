@@ -48,11 +48,12 @@ export default class Parser {
   _tokenize (src) {
     let tokens = this._parseRules(src)
 
-    let headIndex = tokens.findIndex((t) => t.type === 'head_text')
-    let bodyIndex = tokens.findIndex((t) => t.type === 'body_text')
-
     const INJECTION_REGION = ['injection_begin', 'injection_end']
+
+    let headIndex = tokens.findIndex((t) => t.type === 'head_text')
     this._expandToken(tokens, headIndex, INJECTION_REGION)
+
+    let bodyIndex = tokens.findIndex((t) => t.type === 'body_text')
     this._expandToken(tokens, bodyIndex, INJECTION_REGION)
 
     return tokens

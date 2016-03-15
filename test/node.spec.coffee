@@ -54,3 +54,19 @@ describe 'Node', ->
     n.lastChild.type.should.equal('injection')
     n.lastChild.firstChild.should.deep.equal(wrap('injection_text', baz))
     n.validate().should.be.true
+  it 'InjectionBlock::injectBefore - ensure children uniqueness', ->
+    i = new InjectionBlock()
+    i.injectBefore(foo)
+    i.injectBefore(bar)
+    i.injectBefore(foo)
+    i.injectBefore(baz)
+    i.injectBefore(bar)
+    i.children.should.deep.equal([baz, bar, foo].map(wrap.bind(null, 'injection_text')))
+  it 'InjectionBlock::injectAfter - ensure children uniqueness', ->
+    i = new InjectionBlock()
+    i.injectAfter(foo)
+    i.injectAfter(bar)
+    i.injectAfter(foo)
+    i.injectAfter(baz)
+    i.injectAfter(bar)
+    i.children.should.deep.equal([foo, bar, baz].map(wrap.bind(null, 'injection_text')))
