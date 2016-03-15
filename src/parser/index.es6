@@ -64,10 +64,8 @@ export default class Parser {
     tokens.splice(index, 1, ...this._parseRules(token.content, ruleNames, token.type))
   }
   _reduceBlock (tokens) {
-    let root = []
-    let stack = [
-      { type: root, children: root }
-    ]
+    let root = new Document()
+    let stack = [ root ]
 
     function top () { return stack[stack.length - 1] }
 
@@ -81,10 +79,10 @@ export default class Parser {
           let block = stack.pop()
           if (block.type !== t) throw new SyntaxError(`No matching '${t}_begin'`)
           block.end = token
-          top().children.push(block)
+          top().append(block)
           break
         default:
-          top().children.push(token)
+          top().append(token)
       }
     })
 
@@ -95,8 +93,9 @@ export default class Parser {
   parse (src) {
     let tokens = this._tokenize(src)
 
-    let doc = new Document()
-    doc.children = this._reduceBlock(tokens)
+    // let doc = new Document()
+    // doc.children = this._reduceBlock(tokens)
+    let doc = this._reduceBlock(tokens)
 
     return doc
   }

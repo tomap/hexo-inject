@@ -29,6 +29,14 @@ export default class Node {
   get lastChild () {
     return this.children.length === 0 ? null : this.children[this.children.length - 1]
   }
+  prepend (content) {
+    // if (_.isArray(content)) return content.forEach(this.prepend.bind(this))
+    this.children.unshift(content)
+  }
+  append (content) {
+    // if (_.isArray(content)) return content.forEach(this.append.bind(this))
+    this.children.push(content)
+  }
   clear () {
     this.children = []
   }
@@ -58,17 +66,17 @@ export class Block extends Node {
     let firstChild = this.firstChild
     if (firstChild === null || firstChild.type !== 'injection') {
       firstChild = new InjectionBlock()
-      this.children.unshift(firstChild)
+      this.prepend(firstChild)
     }
-    firstChild.injectAfter(content)
+    firstChild.append(content)
   }
   injectAfter (content) {
     let lastChild = this.lastChild
     if (lastChild === null || lastChild.type !== 'injection') {
       lastChild = new InjectionBlock()
-      this.children.push(lastChild)
+      this.append(lastChild)
     }
-    lastChild.injectAfter(content)
+    lastChild.append(content)
   }
   clearInjections () {
     let { firstChild, lastChild } = this
@@ -93,15 +101,21 @@ export class InjectionBlock extends Block {
     this._contentHash[hash] = node
     return true
   }
-  injectBefore (content) {
-    if (_.isArray(content)) return content.forEach(this.injectBefore.bind(this))
+  prepend (content) {
+    if (_.isArray(content)) return content.forEach(this.prepend.bind(this))
     content = wrap('injection_text', content)
-    if (this._ensureUniqueContent(content)) this.children.unshift(content)
+    if (this._ensureUniqueContent(content)) super.prepend(content)
+  }
+  append (content) {
+    if (_.isArray(content)) return content.forEach(this.append.bind(this))
+    content = wrap('injection_text', content)
+    if (this._ensureUniqueContent(content)) super.append(content)
+  }
+  injectBefore (content) {
+    this.prepend(content)
   }
   injectAfter (content) {
-    if (_.isArray(content)) return content.forEach(this.injectAfter.bind(this))
-    content = wrap('injection_text', content)
-    if (this._ensureUniqueContent(content)) this.children.push(content)
+    this.append(content)
   }
   clear () {
     super.clear()

@@ -6,16 +6,16 @@ describe 'Node', ->
   baz = wrap('test', 'baz')
   it 'Node::firstChild', ->
     n = new Node()
-    n.children.push(foo)
-    n.children.push(bar)
+    n.append(foo)
+    n.append(bar)
     n.firstChild.should.equal(foo)
   it 'Node::firstChild - empty', ->
     n = new Node()
     expect(n.firstChild).to.be.null
   it 'Node::lastChild', ->
     n = new Node()
-    n.children.push(foo)
-    n.children.push(bar)
+    n.append(foo)
+    n.append(bar)
     n.lastChild.should.equal(bar)
   it 'Node::lastChild - empty', ->
     n = new Node()
@@ -23,10 +23,10 @@ describe 'Node', ->
   it 'Block::injectBefore', ->
     n = new Block()
     i = new InjectionBlock()
-    i.children.push(foo)
-    n.children.push(i)
-    n.children.push(foo)
-    n.children.push(bar)
+    i.append(foo)
+    n.append(i)
+    n.append(foo)
+    n.append(bar)
     n.injectBefore(baz)
     n.firstChild.type.should.equal('injection')
     n.firstChild.lastChild.should.deep.equal(wrap('injection_text', baz))
@@ -40,10 +40,10 @@ describe 'Node', ->
   it 'Block::injectAfter', ->
     n = new Block()
     i = new InjectionBlock()
-    i.children.push(foo)
-    n.children.push(foo)
-    n.children.push(bar)
-    n.children.push(i)
+    i.append(foo)
+    n.append(foo)
+    n.append(bar)
+    n.append(i)
     n.injectAfter(baz)
     n.lastChild.type.should.equal('injection')
     n.lastChild.lastChild.should.deep.equal(wrap('injection_text', baz))
