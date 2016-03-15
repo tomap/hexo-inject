@@ -62,7 +62,7 @@ describe 'Transform', ->
 
   it 'should not transform incomplete HTML', ->
     inject._transform(partial, source: 'test-partial')
-      .should.eventually.equal(partial)
+      .should.equal(partial)
     mock_hexo.log.debug.calledTwice.should.be.true
     mock_hexo.log.debug.calledWithMatch('[hexo-inject] SKIP: test-partial').should.be.true
 
