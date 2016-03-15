@@ -14,7 +14,7 @@ const Content = {
     let shouldInject = resolve(opts.shouldInject, src)
     return await Promise.props({ html, shouldInject })
   },
-  async _resolveInjectionPoint (pos, src) {
+  async _resolveInjectionPoint (src, pos) {
     return await Promise.map(this._injectors[pos], this._resolveContent.bind(this, src))
   },
   async _buildHTMLTag (name, attrs, content, endTag, src) {

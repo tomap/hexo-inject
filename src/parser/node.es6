@@ -75,9 +75,11 @@ export class InjectionBlock extends Block {
     super('injection', begin, end)
   }
   injectBefore (content) {
+    if (_.isArray(content)) return content.forEach(this.injectBefore.bind(this))
     this.children.unshift(wrap('injection_text', content))
   }
   injectAfter (content) {
+    if (_.isArray(content)) return content.forEach(this.injectAfter.bind(this))
     this.children.push(wrap('injection_text', content))
   }
 }

@@ -11,7 +11,12 @@ const Transform = {
       if (!doc.isComplete) throw new Error('Incomplete document')
       let injections = _.object(INJECTION_POINTS, INJECTION_POINTS.map(this._resolveInjectionPoint.bind(this, src)))
       let resolved = await Promise.props(injections)
-      resolved = _.mapObject(resolved, (content) => content.filter(({ shouldInject }) => shouldInject).join('\n'))
+      resolved = _.mapObject(resolved, (value) => {
+        return _.chain(value)
+          .filter(({ shouldInject }) => shouldInject)
+          .pluck('html')
+          .value()
+      })
 
       doc.head.injectBefore(resolved['head_begin'])
       doc.head.injectAfter(resolved['head_end'])
