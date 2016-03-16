@@ -11,7 +11,8 @@ export const REGEX = {
   body_begin        : /([\s\S]*?)(<body.*>[\n\r\s\t]*)([\s\S]*)/i,
   body_end          : /([\s\S]*?)([\n\r\s\t]*<\/body>)([\s\S]*)/i,
   injection_begin   : /([\s\S]*?)(<!-- hexo-inject:begin -->)([\s\S]*)/i,
-  injection_end     : /([\s\S]*?)(<!-- hexo-inject:end -->)([\s\S]*)/i
+  injection_end     : /([\s\S]*?)(<!-- hexo-inject:end -->)([\s\S]*)/i,
+  stack_trace       : /\s+at(?:\s(\S*))?(?:\s\[as\s(\S*)\])?\s\(?(\S*?):(\d+):(\d+)\)?/
 }
 
 export const API = [
