@@ -8,6 +8,8 @@ describe 'API', ->
     extend:
       filter:
         register: sinon.stub()
+      generator:
+        register: sinon.stub()
     execFilter: sinon.stub()
 
   inject = null
@@ -19,6 +21,7 @@ describe 'API', ->
     it 'should expose API via `hexo.inject`', ->
       mock_hexo.extend.filter.register.calledWith('after_render:html').should.be.true
       mock_hexo.extend.filter.register.calledWith('after_init').should.be.true
+      mock_hexo.extend.generator.register.calledWith('inject').should.be.true
       mock_hexo.inject.should.equal(inject)
     it.skip 'should execute `inject_ready` filter`', ->
       mock_hexo.execFilter.calledWith('inject_ready', inject, { context: mock_hexo })
