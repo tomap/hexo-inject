@@ -11,13 +11,18 @@ export default class Parser {
     ruleNames = ruleNames || INJECTION_POINTS
     let rules = ruleNames.map((i) => REGEX[i])
 
+    let delta = 0
     let { tokens, text } = rules.reduce((context, r, i) => {
       let ruleName = ruleNames[i]
       let [rule, pos] = ruleName.split('_')
       let isEnd = pos === 'end'
       let m = r.exec(context.text)
       if (m) {
-        let [, before, tag, remain] = m
+        delta++
+        let tag = m[1]
+        let offset = m.index
+        let before = context.text.substr(0, offset)
+        let remain = context.text.substr(offset + tag.length)
         context.text = remain
         if (before !== '') {
           context.tokens.push({
@@ -34,7 +39,7 @@ export default class Parser {
     }, { text: src, tokens: [] })
 
     if (text !== '') {
-      if (text === src) {
+      if (delta === 0) {
         tokens.push({
           type: defaultType,
           content: text
@@ -93,8 +98,6 @@ export default class Parser {
   parse (src) {
     let tokens = this._tokenize(src)
 
-    // let doc = new Document()
-    // doc.children = this._reduceBlock(tokens)
     let doc = this._reduceBlock(tokens)
 
     return doc

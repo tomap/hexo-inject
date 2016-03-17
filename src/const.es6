@@ -6,12 +6,12 @@ export const INJECTION_POINTS = [
 ]
 
 export const REGEX = {
-  head_begin        : /([\s\S]*?)(<head.*>[\n\r\s\t]*)([\s\S]*)/i,
-  head_end          : /([\s\S]*?)([\n\r\s\t]*<\/head>)([\s\S]*)/i,
-  body_begin        : /([\s\S]*?)(<body.*>[\n\r\s\t]*)([\s\S]*)/i,
-  body_end          : /([\s\S]*?)([\n\r\s\t]*<\/body>)([\s\S]*)/i,
-  injection_begin   : /([\s\S]*?)(<!-- hexo-inject:begin -->)([\s\S]*)/i,
-  injection_end     : /([\s\S]*?)(<!-- hexo-inject:end -->)([\s\S]*)/i,
+  head_begin        : /(<head.*>[\n\r\s\t]*)/i,
+  head_end          : /([\n\r\s\t]*<\/head>)/i,
+  body_begin        : /(<body.*>[\n\r\s\t]*)/i,
+  body_end          : /([\n\r\s\t]*<\/body>)/i,
+  injection_begin   : /(<!-- hexo-inject:begin -->)/i,
+  injection_end     : /(<!-- hexo-inject:end -->)/i,
   stack_trace       : /\s+at(?:\s(\S*))?(?:\s\[as\s(\S*)\])?\s\(?(\S*?):(\d+):(\d+)\)?/
 }
 
