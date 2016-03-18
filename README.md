@@ -70,9 +70,9 @@ hexo.extend.filter.register('inject_ready', (inject) => {
 hexo-inject provides a few helpers for simple HTML content injection:
 
 * `tag (injectionPoint, name, attrs, content, endTag, opts)`
-* `script (pos, attrs, content, opts)`
-* `style (pos, attrs, content, opts)`
-* `link (pos, attrs, opts)`
+* `script (injectionPoint, attrs, content, opts)`
+* `style (injectionPoint, attrs, content, opts)`
+* `link (injectionPoint, attrs, opts)`
 
 Examples:
 ```js
@@ -87,7 +87,7 @@ Notes:
 
 ### 4. Inject files
 
-hexo-inject also provides `require (pos, module, opts)` helper for file injection.
+hexo-inject also provides `require (injectionPoint, module, opts)` helper for file injection.
 
 The workflow is:
 * File path is specified by `module` and is resolved relative to the callsite script's folder
