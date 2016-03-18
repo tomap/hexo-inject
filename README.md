@@ -1,4 +1,4 @@
-# hexo-inject
+# hexo-inject [![Build Status](https://travis-ci.org/akfish/hexo-inject.svg?branch=master)](https://travis-ci.org/akfish/hexo-inject)
 
 Dynamic script & style (and more) injection for Hexo
 
